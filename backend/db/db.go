@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"path/filepath"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -13,7 +14,8 @@ var DB *sql.DB
 func InitDB() {
 	var err error
 	// connecting to sqlite db
-	DB, err = sql.Open("sqlite3", "/home/umair/dev/dhcp-flow/db/dhcp-flow.db")
+	dbPath := filepath.Join("data", "dhcp-flow.db")
+	DB, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
 		panic(err)
 	}

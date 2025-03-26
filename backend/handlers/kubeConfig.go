@@ -5,10 +5,25 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
+)
+
+const (
+	kubeConfigDir  = "data"
+	kubeConfigFile = "kubeConfig.yaml"
 )
 
 // kubeconfig handler
 func KubeConfigHandler(w http.ResponseWriter, r *http.Request) {
+	// Ensure data directory exists
+	if err := os.MkdirAll(kubeConfigDir, 0755); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	kubeConfigPath := filepath.Join(kubeConfigDir, kubeConfigFile)
+
 	if r.Method == "POST" {
 		// upload kubeconfig
 		// limit upload file size to 10MB
@@ -20,7 +35,7 @@ func KubeConfigHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer uploadedfile.Close()
-		createdFile, err := os.Create("kubeConfig.yaml")
+		createdFile, err := os.Create(kubeConfigPath)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
@@ -42,7 +57,7 @@ func KubeConfigHandler(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "GET" {
 		// get kubeconfig
 		// read kubeconfig
-		kubeconfig, err := os.ReadFile("kubeConfig.yaml")
+		kubeconfig, err := os.ReadFile(kubeConfigPath)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
@@ -56,7 +71,7 @@ func KubeConfigHandler(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == "DELETE" {
 		// delete kubeconfig
-		err := os.Remove("kubeConfig.yaml")
+		err := os.Remove(kubeConfigPath)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))

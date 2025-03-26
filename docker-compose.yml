@@ -1,0 +1,33 @@
+services:
+  frontend:
+    container_name: dhcp-flow-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    network_mode: "host"
+    restart: unless-stopped
+
+  backend:
+    container_name: dhcp-flow-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - dhcp-flow-backend-data:/app/data
+    network_mode: "host"
+    restart: unless-stopped
+
+volumes:
+  dhcp-flow-backend-data:
+    name: dhcp-flow-backend-data
+    driver: local
+
+networks:
+  host:
+    external: true 

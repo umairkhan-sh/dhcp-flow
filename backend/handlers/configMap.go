@@ -38,7 +38,7 @@ func ConfigMapHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		// read kubeconfig
 		currentDir, _ := os.Getwd()
-		kubeConfigPath := filepath.Join(currentDir, "kubeConfig.yaml")
+		kubeConfigPath := filepath.Join(currentDir, "data", "kubeConfig.yaml")
 		config, err := clientcmd.BuildConfigFromFlags("", kubeConfigPath)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -85,7 +85,7 @@ func ConfigMapHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		// // read kubeconfig
 		currentDir, _ := os.Getwd()
-		kubeConfigPath := filepath.Join(currentDir, "kubeConfig.yaml")
+		kubeConfigPath := filepath.Join(currentDir, "data", "kubeConfig.yaml")
 		config, err := clientcmd.BuildConfigFromFlags("", kubeConfigPath)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
