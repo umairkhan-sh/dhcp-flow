@@ -21,19 +21,12 @@ WORKDIR /app
 RUN mkdir -p /app/data
 
 COPY data/scripts.sql /app/data/
+COPY entrypoint.sh /app/
 
 COPY --from=builder /app/main .
 
-EXPOSE 8080
-
-COPY <<EOF /app/entrypoint.sh
-#!/bin/sh
-if [ ! -f /app/data/dhcp-flow.db ]; then
-    sqlite3 /app/data/dhcp-flow.db < /app/data/scripts.sql
-fi
-./main
-EOF
-
 RUN chmod +x /app/entrypoint.sh
+
+EXPOSE 8080
 
 CMD ["/app/entrypoint.sh"]

@@ -1,9 +1,7 @@
 services:
   frontend:
     container_name: dhcp-flow-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: umairsh/dhcp-flow-frontend
     ports:
       - "80:80"
     depends_on:
@@ -13,9 +11,7 @@ services:
 
   backend:
     container_name: dhcp-flow-backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: umairsh/dhcp-flow-backend
     ports:
       - "8080:8080"
     volumes:
