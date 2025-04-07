@@ -21,6 +21,7 @@ WORKDIR /app
 RUN mkdir -p /app/data
 
 COPY data/scripts.sql /app/data/
+
 COPY entrypoint.sh /app/
 
 COPY --from=builder /app/main .
